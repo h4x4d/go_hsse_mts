@@ -26,6 +26,14 @@ func (library *Library) RebuildHash(NewHash func(string) uint64) {
 	library.hashFunc = NewHash
 }
 
+func (library *Library) RebuildStorage(newStorage storage.Storage) {
+	for _, bookPtr := range library.storage.GetAllBooks() {
+		newStorage.AddBook(bookPtr)
+	}
+	library.storage.Clear()
+	library.storage = newStorage
+}
+
 func (library *Library) GetBook(title string) (*book.Book, bool) {
 	bookPtr, ok := library.storage.GetBook(library.hashFunc(title))
 	if ok {

@@ -57,7 +57,7 @@ var booksLib = []book.Book{
 }
 
 func TestLibrary(t *testing.T) {
-	for _, testStorage := range storages {
+	for index, testStorage := range storages {
 		booksCopy := booksLib
 		library := NewLibrary(testStorage, Hash64)
 
@@ -81,5 +81,15 @@ func TestLibrary(t *testing.T) {
 
 		newHashBook, status := library.GetBook(bookInLibrary.Title)
 		assert.Equal(t, bookInLibrary, newHashBook, "Book in Library changed after hash change")
+
+		library.RebuildStorage(storages[1-index])
+
+		newStorageBook, status := library.GetBook(bookInLibrary.Title)
+		assert.Equal(t, bookInLibrary, newStorageBook, "Book in Library changed after hash change")
+
+		library.AddBook(booksCopy[0])
+		addedBook, status := library.GetBook(booksCopy[0].Title)
+		assert.Equal(t, status, true, "Added book not found")
+		assert.Equal(t, *addedBook, booksCopy[0], "Incorrect book added")
 	}
 }
