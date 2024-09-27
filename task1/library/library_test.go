@@ -82,7 +82,7 @@ func TestLibrary(t *testing.T) {
 		library.RebuildStorage(storages[1-index])
 
 		newStorageBook, status := library.GetBook(bookInLibrary.Title)
-		assert.Equal(t, bookInLibrary, newStorageBook, "Book in Library changed after hash change")
+		assert.Equal(t, bookInLibrary, newStorageBook, "Book in Library changed after storage change")
 
 		library.AddBook(booksCopy[0])
 		addedBook, status := library.GetBook(booksCopy[0].Title)
