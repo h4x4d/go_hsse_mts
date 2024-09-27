@@ -49,21 +49,16 @@ func TestCRUD(t *testing.T) {
 	for _, storage := range storages {
 		booksCopy := books
 		for index, bookToAdd := range booksCopy {
-			storage.AddBook(&bookToAdd)
+			storage.AddBook(bookToAdd)
 			assert.Equal(t, index+1, len(storage.GetAllBooks()), "Book is not added")
 			addedBook, status := storage.GetBook(bookToAdd.Id)
 			assert.Equal(t, status, true, "Added book not found")
-			assert.Equal(t, *addedBook, bookToAdd, "Incorrect book added")
+			assert.Equal(t, addedBook, bookToAdd, "Incorrect book added")
 		}
 
 		storage.DeleteBook(booksCopy[0].Id)
 		_, status := storage.GetBook(booksCopy[0].Id)
 		assert.Equal(t, status, false, "Book is not deleted correctly")
-
-		bookToEdit, _ := storage.GetBook(booksCopy[1].Id)
-		bookToEdit.Language = "en"
-		bookInStorage, _ := storage.GetBook(booksCopy[1].Id)
-		assert.Equal(t, bookInStorage, bookToEdit, "Book in storage is not modified on modify of book")
 
 		storage.Clear()
 		assert.Equal(t, len(storage.GetAllBooks()), 0, "Books not deleted on clear")

@@ -65,17 +65,14 @@ func TestLibrary(t *testing.T) {
 			library.AddBook(bookToAdd)
 			addedBook, status := library.GetBook(bookToAdd.Title)
 			assert.Equal(t, status, true, "Added book not found")
-			assert.Equal(t, *addedBook, bookToAdd, "Incorrect book added")
+			assert.Equal(t, addedBook, bookToAdd, "Incorrect book added")
 		}
 
 		library.DeleteBook(booksCopy[0].Title)
 		_, status := library.GetBook(booksCopy[0].Title)
 		assert.Equal(t, status, false, "Book is not deleted correctly")
 
-		bookToEdit, _ := library.GetBook(booksCopy[1].Title)
-		bookToEdit.Language = "en"
 		bookInLibrary, _ := library.GetBook(booksCopy[1].Title)
-		assert.Equal(t, bookInLibrary, bookToEdit, "Book in Library is not modified on modify of book")
 
 		library.RebuildHash(Hash32)
 
@@ -90,6 +87,6 @@ func TestLibrary(t *testing.T) {
 		library.AddBook(booksCopy[0])
 		addedBook, status := library.GetBook(booksCopy[0].Title)
 		assert.Equal(t, status, true, "Added book not found")
-		assert.Equal(t, *addedBook, booksCopy[0], "Incorrect book added")
+		assert.Equal(t, addedBook, booksCopy[0], "Incorrect book added")
 	}
 }

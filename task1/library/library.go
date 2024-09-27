@@ -15,15 +15,15 @@ func NewLibrary(storage storage.Storage, hashFunc func(string) uint64) *Library 
 	return &Library{storage, hashFunc}
 }
 
-func (library *Library) RebuildHash(NewHash func(string) uint64) {
+func (library *Library) RebuildHash(newHash func(string) uint64) {
 	save := library.storage.GetAllBooks()
 	library.storage.Clear()
 
 	for _, bookPtr := range save {
-		bookPtr.Id = NewHash(bookPtr.Title)
+		bookPtr.Id = newHash(bookPtr.Title)
 		library.storage.AddBook(bookPtr)
 	}
-	library.hashFunc = NewHash
+	library.hashFunc = newHash
 }
 
 func (library *Library) RebuildStorage(newStorage storage.Storage) {
@@ -34,17 +34,14 @@ func (library *Library) RebuildStorage(newStorage storage.Storage) {
 	library.storage = newStorage
 }
 
-func (library *Library) GetBook(title string) (*book.Book, bool) {
+func (library *Library) GetBook(title string) (book.Book, bool) {
 	bookPtr, ok := library.storage.GetBook(library.hashFunc(title))
-	if ok {
-		return &bookPtr.Book, ok
-	}
-	return nil, ok
+	return bookPtr.Book, ok
 }
 
 func (library *Library) AddBook(bookToAdd book.Book) {
 	bookWithId := book.NumberedBook{Id: library.hashFunc(bookToAdd.Title), Book: bookToAdd}
-	library.storage.AddBook(&bookWithId)
+	library.storage.AddBook(bookWithId)
 }
 
 func (library *Library) DeleteBook(title string) {

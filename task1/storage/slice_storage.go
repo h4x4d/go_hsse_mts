@@ -6,16 +6,16 @@ import (
 )
 
 type SliceStorage struct {
-	storage []*book.NumberedBook
+	storage []book.NumberedBook
 }
 
-func (storage *SliceStorage) GetBook(id uint64) (*book.NumberedBook, bool) {
+func (storage *SliceStorage) GetBook(id uint64) (book.NumberedBook, bool) {
 	for _, bookPtr := range storage.storage {
 		if bookPtr.Id == id {
 			return bookPtr, true
 		}
 	}
-	return nil, false
+	return book.NumberedBook{}, false
 }
 
 func (storage *SliceStorage) DeleteBook(id uint64) {
@@ -28,13 +28,13 @@ func (storage *SliceStorage) DeleteBook(id uint64) {
 }
 
 func (storage *SliceStorage) Clear() {
-	storage.storage = make([]*book.NumberedBook, 0)
+	storage.storage = make([]book.NumberedBook, 0)
 }
 
-func (storage *SliceStorage) AddBook(toAdd *book.NumberedBook) {
+func (storage *SliceStorage) AddBook(toAdd book.NumberedBook) {
 	storage.storage = append(storage.storage, toAdd)
 }
 
-func (storage *SliceStorage) GetAllBooks() []*book.NumberedBook {
+func (storage *SliceStorage) GetAllBooks() []book.NumberedBook {
 	return storage.storage
 }
