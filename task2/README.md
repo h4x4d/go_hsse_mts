@@ -1,6 +1,19 @@
 # Second Go Homework
-### Test coverage: 78% (all except error handling)
+### Test coverage: 78%
 
+## To run tests:
+### Client tests:
+In  /client directory use 
+```bash
+go test
+```
+(ensure server is running)
+### Server-Client tests:
+In main directory of task use
+```bash
+go test
+```
+(no additional requierements)
 
 ## Server:
 

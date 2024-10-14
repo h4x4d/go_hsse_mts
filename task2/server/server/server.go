@@ -14,9 +14,9 @@ func NewServer(port string) *Server {
 	server := Server{}
 
 	mux := http.NewServeMux()
-	mux.HandleFunc("/version", server.VersionHandler)
-	mux.HandleFunc("/decode", server.DecodeHandler)
-	mux.HandleFunc("/hard-op", server.HardOpHandler)
+	mux.HandleFunc("GET /version", server.VersionHandler)
+	mux.HandleFunc("POST /decode", server.DecodeHandler)
+	mux.HandleFunc("GET /hard-op", server.HardOpHandler)
 
 	server.server = &http.Server{
 		Addr:    port,
