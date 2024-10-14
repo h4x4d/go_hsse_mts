@@ -1,9 +1,13 @@
 package server
 
 import (
+	"context"
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
+	"os/signal"
 )
 
 type Server struct {
@@ -26,8 +30,21 @@ func NewServer(port string) *Server {
 }
 
 func (server *Server) Start() {
+	idleConnectionsClosed := make(chan struct{})
+	go func() {
+		sigint := make(chan os.Signal, 1)
+		signal.Notify(sigint, os.Interrupt)
+		<-sigint
+		if err := server.server.Shutdown(context.Background()); err != nil {
+			log.Printf("HTTP Server Shutdown Error: %v", err)
+		}
+		close(idleConnectionsClosed)
+	}()
+
 	if err := server.server.ListenAndServe(); err != nil &&
 		!errors.Is(err, http.ErrServerClosed) {
 		fmt.Println(err)
 	}
+
+	<-idleConnectionsClosed
 }
